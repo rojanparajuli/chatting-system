@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "207813422762",
+    "project_id": "audiochat-f60fd",
+    "storage_bucket": "audiochat-f60fd.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:207813422762:android:5fc6e143467f3fd0182ad3",
+        "android_client_info": {
+          "package_name": "com.rojan.audiocall"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCPsBpI-6UHdE5oyg8v-4joXt35_MBgYWI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
