@@ -1,6 +1,7 @@
 import 'package:audiocall/bloc/people_list/people_list_bloc.dart';
 import 'package:audiocall/bloc/people_list/people_list_state.dart';
 import 'package:audiocall/constant/image.dart';
+import 'package:audiocall/util/drawer.dart';
 import 'package:audiocall/view/chat_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -32,23 +33,41 @@ class UserListScreen extends StatelessWidget {
     }
   }
 
-  final currentUserId = FirebaseAuth.instance.currentUser!.uid;
+  final currentUser = FirebaseAuth.instance.currentUser;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>(); 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text(
-          '${getGreeting()} ${FirebaseAuth.instance.currentUser?.displayName}',
-          style: TextStyle(
-              color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
+          '${getGreeting()} ${currentUser?.displayName ?? 'User'}',
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 15,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         centerTitle: true,
         backgroundColor: const Color.fromARGB(255, 154, 154, 242),
+        automaticallyImplyLeading: false,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.menu, color: Colors.white),
+            onPressed: () {
+              _scaffoldKey.currentState?.openEndDrawer(); 
+            },
+          ),
+        ],
+      ),
+      endDrawer: DrawerItem(
+        image: getUserImage(''), 
       ),
       body: BlocBuilder<PeopleListBloc, PeopleListState>(
         builder: (context, state) {
           if (state is PeopleListUserLoading) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (state is PeopleListUserLoaded) {
             return Stack(
               children: [
@@ -66,6 +85,7 @@ class UserListScreen extends StatelessWidget {
                   itemBuilder: (context, index) {
                     var user = state.users[index];
                     String imageUrl = getUserImage(user['gender']);
+
                     return GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -74,7 +94,7 @@ class UserListScreen extends StatelessWidget {
                             builder: (context) => ChatScreen(
                               chatId: user['id'],
                               name: '${user['name']} ${user['surname']}',
-                              senderId: currentUserId.toString(),
+                              senderId: currentUser?.uid ?? '',
                               image: imageUrl,
                               age: user['age'],
                               bio: user['bio'],
@@ -87,9 +107,7 @@ class UserListScreen extends StatelessWidget {
                       child: Card(
                         child: Column(
                           children: [
-                            SizedBox(
-                              height: 30,
-                            ),
+                            const SizedBox(height: 30),
                             ListTile(
                               leading: imageUrl.isNotEmpty
                                   ? CircleAvatar(
@@ -99,58 +117,57 @@ class UserListScreen extends StatelessWidget {
                               title: RichText(
                                 text: TextSpan(
                                   children: [
-                                    TextSpan(
+                                    const TextSpan(
                                       text: 'Name: ',
                                       style: TextStyle(color: Colors.black),
                                     ),
                                     TextSpan(
                                       text: '${user['name']} ${user['surname']}',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        color: const Color.fromARGB(255, 154, 154, 242),
+                                        color: Color.fromARGB(255, 154, 154, 242),
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
                               subtitle: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                    RichText(
+                                  RichText(
                                     text: TextSpan(
                                       children: [
-                                      TextSpan(
-                                        text: 'Email: ',
-                                        style: TextStyle(color: Colors.black),
-                                      ),
-                                      TextSpan(
-                                        text: '${user['email'] ?? 'No Email'}',
-                                        style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: const Color.fromARGB(255, 154, 154, 242),
+                                        const TextSpan(
+                                          text: 'Email: ',
+                                          style: TextStyle(color: Colors.black),
                                         ),
-                                      ),
+                                        TextSpan(
+                                          text: user['email'] ?? 'No Email',
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Color.fromARGB(255, 154, 154, 242),
+                                          ),
+                                        ),
                                       ],
                                     ),
-                                    ),
-                                    RichText(
+                                  ),
+                                  RichText(
                                     text: TextSpan(
                                       children: [
-                                      TextSpan(
-                                        text: 'Username: ',
-                                        style: TextStyle(color: Colors.black),
-                                      ),
-                                      TextSpan(
-                                        text: '${user['username'] ?? 'No Username'}',
-                                        style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: const Color.fromARGB(255, 154, 154, 242),
+                                        const TextSpan(
+                                          text: 'Username: ',
+                                          style: TextStyle(color: Colors.black),
                                         ),
-                                      ),
+                                        TextSpan(
+                                          text: user['username'] ?? 'No Username',
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Color.fromARGB(255, 154, 154, 242),
+                                          ),
+                                        ),
                                       ],
                                     ),
-                                    ),
+                                  ),
                                 ],
                               ),
                             ),
@@ -163,7 +180,7 @@ class UserListScreen extends StatelessWidget {
               ],
             );
           } else {
-            return Center(child: Text('Error loading users'));
+            return const Center(child: Text('Error loading users'));
           }
         },
       ),
