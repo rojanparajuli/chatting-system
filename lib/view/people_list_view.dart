@@ -24,7 +24,9 @@ class UserListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Users')),
+      appBar: AppBar(title: Text('Users ${FirebaseAuth.instance.currentUser?.displayName}'),
+      centerTitle: true,
+      ),
       body: BlocBuilder<PeopleListBloc, PeopleListState>(
         builder: (context, state) {
           if (state is PeopleListUserLoading) {
