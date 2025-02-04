@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 
-
 class CallScreen extends StatefulWidget {
   final String chatId;
   final String callerId;
@@ -35,8 +34,13 @@ class CallScreenState extends State<CallScreen> {
   }
 
   Future<void> _initializeWebRTC() async {
-    _localStream = await navigator.mediaDevices.getUserMedia({'audio': true, 'video': false});
-    _peerConnection = await createPeerConnection({'iceServers': [{'url': 'stun:stun.l.google.com:19302'}]});
+    _localStream = await navigator.mediaDevices
+        .getUserMedia({'audio': true, 'video': false});
+    _peerConnection = await createPeerConnection({
+      'iceServers': [
+        {'url': 'stun:stun.l.google.com:19302'}
+      ]
+    });
     _peerConnection?.addStream(_localStream!);
   }
 
