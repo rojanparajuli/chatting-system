@@ -53,8 +53,9 @@ class UserListScreen extends StatelessWidget {
                           MaterialPageRoute(
                             builder: (context) => ChatScreen(
                               chatId: user['id'],
-                              userName: user['name'],
+                              userName: '${user['name']} ${user['surname']}',
                               senderId: currentUserId.toString(),
+                              image: imageUrl,
                             ),
                           ),
                         );

@@ -32,7 +32,7 @@ class SplashScreen extends StatelessWidget {
             }
 
             return Container(
-              decoration: const BoxDecoration(color: Colors.black),
+              decoration: const BoxDecoration(color: Colors.white),
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
