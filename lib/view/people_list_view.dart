@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class UserListScreen extends StatelessWidget {
-   UserListScreen({super.key});
+  UserListScreen({super.key});
 
   String getUserImage(String? gender) {
     if (gender == 'Male') {
@@ -20,12 +20,30 @@ class UserListScreen extends StatelessWidget {
       return '';
     }
   }
+
+  String getGreeting() {
+    final hour = DateTime.now().hour;
+    if (hour < 12) {
+      return 'Good Morning';
+    } else if (hour < 17) {
+      return 'Good Afternoon';
+    } else {
+      return 'Good Evening';
+    }
+  }
+
   final currentUserId = FirebaseAuth.instance.currentUser!.uid;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Users ${FirebaseAuth.instance.currentUser?.displayName}'),
-      centerTitle: true,
+      appBar: AppBar(
+        title: Text(
+          '${getGreeting()} ${FirebaseAuth.instance.currentUser?.displayName}',
+          style: TextStyle(
+              color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+        backgroundColor: const Color.fromARGB(255, 154, 154, 242),
       ),
       body: BlocBuilder<PeopleListBloc, PeopleListState>(
         builder: (context, state) {
@@ -55,47 +73,88 @@ class UserListScreen extends StatelessWidget {
                           MaterialPageRoute(
                             builder: (context) => ChatScreen(
                               chatId: user['id'],
-                              userName: '${user['name']} ${user['surname']}',
+                              name: '${user['name']} ${user['surname']}',
                               senderId: currentUserId.toString(),
                               image: imageUrl,
+                              age: user['age'],
+                              bio: user['bio'],
+                              email: user['email'],
+                              username: user['username'],
                             ),
                           ),
                         );
                       },
                       child: Card(
-                        child: ListTile(
-                          leading: imageUrl.isNotEmpty
-                              ? CircleAvatar(
-                                  backgroundImage: NetworkImage(imageUrl),
-                                )
-                              : null,
-                          title: RichText(
-                            text: TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: 'Name: ',
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                                TextSpan(
-                                  text: '${user['name']} ${user['surname']}',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.blue,
-                                  ),
-                                ),
-                              ],
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 30,
                             ),
-                          ),
-                          subtitle: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('Email: ${user['email'] ?? 'No Email'}',
-                                  style: TextStyle(color: Colors.black)),
-                              Text(
-                                  'Username: ${user['username'] ?? 'No Username'}'),
-                            ],
-                          ),
+                            ListTile(
+                              leading: imageUrl.isNotEmpty
+                                  ? CircleAvatar(
+                                      backgroundImage: NetworkImage(imageUrl),
+                                    )
+                                  : null,
+                              title: RichText(
+                                text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: 'Name: ',
+                                      style: TextStyle(color: Colors.black),
+                                    ),
+                                    TextSpan(
+                                      text: '${user['name']} ${user['surname']}',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: const Color.fromARGB(255, 154, 154, 242),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              subtitle: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                    RichText(
+                                    text: TextSpan(
+                                      children: [
+                                      TextSpan(
+                                        text: 'Email: ',
+                                        style: TextStyle(color: Colors.black),
+                                      ),
+                                      TextSpan(
+                                        text: '${user['email'] ?? 'No Email'}',
+                                        style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: const Color.fromARGB(255, 154, 154, 242),
+                                        ),
+                                      ),
+                                      ],
+                                    ),
+                                    ),
+                                    RichText(
+                                    text: TextSpan(
+                                      children: [
+                                      TextSpan(
+                                        text: 'Username: ',
+                                        style: TextStyle(color: Colors.black),
+                                      ),
+                                      TextSpan(
+                                        text: '${user['username'] ?? 'No Username'}',
+                                        style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: const Color.fromARGB(255, 154, 154, 242),
+                                        ),
+                                      ),
+                                      ],
+                                    ),
+                                    ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     );

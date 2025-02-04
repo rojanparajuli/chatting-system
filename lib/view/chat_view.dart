@@ -10,16 +10,24 @@ import 'package:intl/intl.dart';
 
 class ChatScreen extends StatefulWidget {
   final String chatId;
-  final String userName;
+  final String name;
   final String senderId;
   final String image;
+  final String age;
+  final String bio;
+  final String email;
+  final String username;
 
   const ChatScreen(
       {super.key,
       required this.chatId,
-      required this.userName,
+      required this.name,
       required this.senderId,
-      required this.image});
+      required this.image,
+      required this.age,
+      required this.bio,
+      required this.email,
+      required this.username});
 
   @override
   ChatScreenState createState() => ChatScreenState();
@@ -40,18 +48,35 @@ class ChatScreenState extends State<ChatScreen> {
       appBar: AppBar(
         title: Row(
           children: [
-             CircleAvatar(
-            backgroundImage: NetworkImage(widget.image),
-          ),
-          SizedBox(width: 20),
-            Text(widget.userName,
+            GestureDetector(
+              onTap: () {
+                showUserDetails(context, widget.image, widget.name, widget.age,
+                    widget.bio, widget.email, widget.username);
+              },
+              child: CircleAvatar(
+                backgroundImage: NetworkImage(widget.image),
+              ),
+            ),
+            SizedBox(width: 20),
+            GestureDetector(
+              onTap: () {
+                showUserDetails(context, widget.image, widget.name, widget.age,
+                    widget.bio, widget.email, widget.username);
+              },
+              child: Text(
+                widget.name,
                 style: GoogleFonts.poppins(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white)),
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+              ),
+            ),
           ],
         ),
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: const Color.fromARGB(255, 154, 154, 242),
         elevation: 4,
         centerTitle: true,
         leading: GestureDetector(
@@ -63,7 +88,6 @@ class ChatScreenState extends State<ChatScreen> {
               color: Colors.white,
             )),
         actions: [
-         
           IconButton(
             onPressed: () {
               Navigator.push(
@@ -72,12 +96,9 @@ class ChatScreenState extends State<ChatScreen> {
                       builder: (context) => CallScreen(
                           chatId: widget.chatId,
                           callerId: widget.senderId,
-                          receiverId: widget.userName)));
+                          receiverId: widget.name)));
             },
-            icon: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Icon(Icons.phone),
-            ),
+            icon: Icon(Icons.phone),
             color: Colors.white,
             iconSize: 30,
           ),
@@ -112,59 +133,92 @@ class ChatScreenState extends State<ChatScreen> {
                             alignment: isMe
                                 ? Alignment.centerRight
                                 : Alignment.centerLeft,
-                            child: Container(
-                              padding: const EdgeInsets.all(12),
-                              margin: const EdgeInsets.symmetric(vertical: 5),
-                              constraints: BoxConstraints(
-                                  maxWidth:
-                                      MediaQuery.of(context).size.width * 0.75),
-                              decoration: BoxDecoration(
-                                color:
-                                    isMe ? Colors.blueAccent : Colors.grey[300],
-                                borderRadius: BorderRadius.circular(15),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black26,
-                                    blurRadius: 4,
-                                    offset: Offset(2, 2),
-                                  ),
-                                ],
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    msg['message'],
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 16,
-                                      color:
-                                          isMe ? Colors.white : Colors.black87,
+                            child: Row(
+                              mainAxisAlignment: isMe
+                                  ? MainAxisAlignment.end
+                                  : MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                if (!isMe)
+                                  GestureDetector(
+                                    onTap: () {
+                                      showUserDetails(
+                                          context,
+                                          widget.image,
+                                          widget.name,
+                                          widget.age,
+                                          widget.bio,
+                                          widget.email,
+                                          widget.username);
+                                    },
+                                    child: CircleAvatar(
+                                      backgroundImage:
+                                          NetworkImage(widget.image),
                                     ),
                                   ),
-                                  const SizedBox(height: 5),
-                                  Text(
-                                    (() {
-                                      try {
-                                        if (msg['timestamp'] != null) {
-                                          return DateFormat('hh:mm a').format(
-                                              (msg['timestamp'] as Timestamp)
-                                                  .toDate());
-                                        } else {
-                                          return 'N/A';
-                                        }
-                                      } catch (e) {
-                                        return 'Error';
-                                      }
-                                    })(),
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 12,
-                                      color: isMe
-                                          ? Colors.white70
-                                          : Colors.black54,
-                                    ),
+                                const SizedBox(width: 8),
+                                Container(
+                                  padding: const EdgeInsets.all(12),
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 5),
+                                  constraints: BoxConstraints(
+                                    maxWidth:
+                                        MediaQuery.of(context).size.width *
+                                            0.75,
                                   ),
-                                ],
-                              ),
+                                  decoration: BoxDecoration(
+                                    color: isMe
+                                        ? const Color.fromARGB(255, 154, 154, 242)
+                                        : Colors.grey[300],
+                                    borderRadius: BorderRadius.circular(15),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black26,
+                                        blurRadius: 4,
+                                        offset: Offset(2, 2),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        msg['message'] ?? '',
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 16,
+                                          color: isMe
+                                              ? Colors.white
+                                              : Colors.black87,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 5),
+                                      Text(
+                                        (() {
+                                          try {
+                                            if (msg['timestamp'] != null) {
+                                              return DateFormat('hh:mm a')
+                                                  .format((msg['timestamp']
+                                                          as Timestamp)
+                                                      .toDate());
+                                            } else {
+                                              return 'N/A';
+                                            }
+                                          } catch (e) {
+                                            return 'Error';
+                                          }
+                                        })(),
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 12,
+                                          color: isMe
+                                              ? Colors.white70
+                                              : Colors.black54,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
                           );
                         },
@@ -229,6 +283,92 @@ class ChatScreenState extends State<ChatScreen> {
               radius: 24,
               backgroundColor: Colors.blueAccent,
               child: const Icon(Icons.send, color: Colors.white, size: 22),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void showUserDetails(BuildContext context, String image, String name,
+      String age, String bio, String email, String username) {
+    showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      backgroundColor: Colors.white,
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 30),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CircleAvatar(
+                radius: 55,
+                backgroundColor: Colors.grey[300],
+                child: CircleAvatar(
+                  radius: 50,
+                  backgroundImage: NetworkImage(image),
+                ),
+              ),
+              SizedBox(height: 12),
+
+              // Name
+              Text(
+                name,
+                style: GoogleFonts.poppins(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+              ),
+
+              Divider(thickness: 1.2, color: Colors.grey[300]),
+
+              SizedBox(height: 8),
+
+              _buildDetailRow(Icons.cake, "Age", age),
+              _buildDetailRow(Icons.info, "Bio", bio),
+              _buildDetailRow(Icons.email, "Email", email),
+              _buildDetailRow(Icons.person, "Username", username),
+
+              SizedBox(height: 15),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildDetailRow(IconData icon, String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, color: Colors.blueGrey, size: 22),
+          SizedBox(width: 10),
+          Expanded(
+            child: RichText(
+              text: TextSpan(
+                text: "$label: ",
+                style: GoogleFonts.poppins(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+                children: [
+                  TextSpan(
+                    text: value,
+                    style: GoogleFonts.poppins(
+                      fontSize: 16,
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black54,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
