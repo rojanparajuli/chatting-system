@@ -1,7 +1,7 @@
 import 'package:audiocall/bloc/chat/chat_bloc.dart';
 import 'package:audiocall/bloc/chat/chat_event.dart';
 import 'package:audiocall/bloc/chat/chat_state.dart';
-import 'package:audiocall/view/call_view.dart';
+// import 'package:audiocall/view/call_view.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -87,22 +87,22 @@ class ChatScreenState extends State<ChatScreen> {
               Icons.arrow_back_ios_new,
               color: Colors.white,
             )),
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => CallScreen(
-                          chatId: widget.chatId,
-                          callerId: widget.senderId,
-                          receiverId: widget.name)));
-            },
-            icon: Icon(Icons.phone),
-            color: Colors.white,
-            iconSize: 30,
-          ),
-        ],
+        // actions: [
+        //   IconButton(
+        //     onPressed: () {
+        //       Navigator.push(
+        //           context,
+        //           MaterialPageRoute(
+        //               builder: (context) => CallScreen(
+        //                   chatId: widget.chatId,
+        //                   callerId: widget.senderId,
+        //                   receiverId: widget.name)));
+        //     },
+        //     icon: Icon(Icons.phone),
+        //     color: Colors.white,
+        //     iconSize: 30,
+        //   ),
+        // ],
       ),
       body: Stack(
         children: [

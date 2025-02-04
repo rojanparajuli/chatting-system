@@ -13,53 +13,54 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     on<LoadMessages>(_onLoadMessages);
     on<SendMessage>(_onSendMessage);
     on<CloseChat>(_onCloseChat);
-    on<ChatUpdated>(_onChatUpdated); // ✅ Handle new event for updates
+    on<ChatUpdated>(_onChatUpdated); 
   }
 
-  Future<void> _onLoadMessages(LoadMessages event, Emitter<ChatState> emit) async {
-    emit(ChatLoading());
+ Future<void> _onLoadMessages(LoadMessages event, Emitter<ChatState> emit) async {
+  emit(ChatLoading());
 
-    try {
-      await chatSubscription?.cancel();
+  try {
+    await chatSubscription?.cancel();
 
-      chatSubscription = firestore
-          .collection('chats')
-          .doc(event.chatId)
-          .collection('messages')
-          .orderBy('timestamp')
-          .snapshots()
-          .listen((snapshot) {
-        List<Map<String, dynamic>> messages =
-            snapshot.docs.map((doc) => doc.data()).toList();
+    chatSubscription = firestore
+        .collection('chats')
+        .doc(event.chatId)
+        .collection('messages')
+        .orderBy('timestamp')
+        .snapshots()
+        .listen((snapshot) {
+      List<Map<String, dynamic>> messages = snapshot.docs.map((doc) => doc.data()).toList();
 
-        if (!isClosed) { // ✅ Ensure bloc is still active
-          add(ChatUpdated(messages)); // ✅ Dispatch event instead of emit()
-        }
-      });
-    } catch (e) {
-      if (!isClosed) emit(ChatError(e.toString())); // ✅ Prevent emit after bloc is closed
-    }
+      if (!isClosed) { 
+        add(ChatUpdated(messages)); 
+      }
+    });
+  } catch (e) {
+    if (!isClosed) emit(ChatError(e.toString())); 
   }
+}
+
 
   void _onChatUpdated(ChatUpdated event, Emitter<ChatState> emit) {
-    emit(ChatLoaded(List.from(event.messages))); // ✅ Emit safely
+    emit(ChatLoaded(List.from(event.messages))); 
   }
 
-  Future<void> _onSendMessage(SendMessage event, Emitter<ChatState> emit) async {
-    try {
-      await firestore
-          .collection('chats')
-          .doc(event.chatId)
-          .collection('messages')
-          .add({
-        'senderId': event.senderId,
-        'message': event.message,
-        'timestamp': FieldValue.serverTimestamp(),
-      });
-    } catch (e) {
-      emit(ChatError(e.toString()));
-    }
+ Future<void> _onSendMessage(SendMessage event, Emitter<ChatState> emit) async {
+  try {
+    await firestore
+        .collection('chats')
+        .doc(event.chatId) 
+        .collection('messages')
+        .add({
+      'senderId': event.senderId,
+      'message': event.message,
+      'timestamp': FieldValue.serverTimestamp(),
+    });
+  } catch (e) {
+    emit(ChatError(e.toString()));
   }
+}
+
 
   Future<void> _onCloseChat(CloseChat event, Emitter<ChatState> emit) async {
     await chatSubscription?.cancel();

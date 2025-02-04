@@ -9,7 +9,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc(this.authRepository) : super(AuthInitial()) {
     on<SignUpRequested>((event, emit) async {
       emit(AuthLoading());
-      print('state is blocccc $state');
       try {
         await authRepository.signUp(
           name: event.name,
@@ -20,14 +19,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           email: event.email,
           password: event.password,
           bio: event.bio,
-          verified: event.verified
+          verified: event.verified,
         );
         emit(AuthSuccess(message: "Signup successful!"));
-        print('state is bloccccc $state');
       } catch (e) {
-        print('state is bloccccc $state');
-
-        emit(AuthFailure(e.toString()));
+        emit(AuthFailure("Signup failed: ${e.toString()}"));
       }
     });
 
@@ -42,10 +38,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           await authRepository.saveToken(user);
           emit(AuthSuccess(message: "Login successful!"));
         } else {
-          emit(AuthFailure('Login failed'));
+          emit(AuthFailure('Invalid credentials'));
         }
       } catch (e) {
-        emit(AuthFailure(e.toString()));
+        emit(AuthFailure("Login failed: ${e.toString()}"));
       }
     });
 
@@ -55,7 +51,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         await authRepository.logout();
         emit(AuthInitial());
       } catch (e) {
-        emit(AuthFailure(e.toString()));
+        emit(AuthFailure("Logout failed: ${e.toString()}"));
       }
     });
 
@@ -65,7 +61,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         await authRepository.forgotPassword(event.email);
         emit(AuthSuccess(message: 'Password reset email sent!'));
       } catch (e) {
-        emit(AuthFailure(e.toString()));
+        emit(AuthFailure("Error: ${e.toString()}"));
       }
     });
 
@@ -78,7 +74,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         );
         emit(AuthSuccess(message: 'Password changed successfully!'));
       } catch (e) {
-        emit(AuthFailure(e.toString()));
+        emit(AuthFailure("Change password failed: ${e.toString()}"));
       }
     });
   }
