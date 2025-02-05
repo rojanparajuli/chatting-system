@@ -63,7 +63,6 @@ class DrawerItem extends StatelessWidget {
         );
       }
 
-      // Get gender from Firestore
       String? gender = snapshot.data?['gender'];
       imageUrl = getUserImage(gender);
 
