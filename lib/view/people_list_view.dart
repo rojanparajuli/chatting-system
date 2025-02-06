@@ -72,14 +72,19 @@ class UserListScreen extends StatelessWidget {
             return Stack(
               children: [
                 Opacity(
-                  opacity: 0.1,
-                  child: Image.asset(
-                    'assets/logo.png',
+                  opacity: 0.8,
+                  child: Image.network(
+                   AppImage.home,
                     width: double.infinity,
                     height: double.infinity,
                     fit: BoxFit.cover,
                   ),
                 ),
+                Text('${getGreeting()} ${currentUser?.displayName ?? 'User'}',     style: const TextStyle(
+            color: Colors.white,
+            fontSize: 15,
+            fontWeight: FontWeight.bold,
+          ),),
                 ListView.builder(
                   itemCount: state.users.length,
                   itemBuilder: (context, index) {

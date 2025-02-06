@@ -1,6 +1,7 @@
 import 'package:audiocall/bloc/chat/chat_bloc.dart';
 import 'package:audiocall/bloc/chat/chat_event.dart';
 import 'package:audiocall/bloc/chat/chat_state.dart';
+import 'package:audiocall/constant/image.dart';
 // import 'package:audiocall/view/call_view.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -107,9 +108,9 @@ class ChatScreenState extends State<ChatScreen> {
       body: Stack(
         children: [
           Opacity(
-            opacity: 0.1,
-            child: Image.asset(
-              'assets/logo.png',
+            opacity: 0.4,
+            child: Image.network(
+              AppImage.message,
               width: double.infinity,
               height: double.infinity,
               fit: BoxFit.cover,

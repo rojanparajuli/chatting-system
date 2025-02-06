@@ -67,51 +67,69 @@ class DrawerItem extends StatelessWidget {
       imageUrl = getUserImage(gender);
 
       return UserAccountsDrawerHeader(
-        decoration: const BoxDecoration(
-            color: Color.fromARGB(255, 154, 154, 242)),
-        accountName: Text(
-          user?.displayName ?? 'Guest User',
-          style: GoogleFonts.lora(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        accountEmail: Text(
-          user?.email ?? 'No Email',
-          style: GoogleFonts.lora(fontSize: 14),
-        ),
-        currentAccountPicture: CircleAvatar(
-          backgroundColor: Colors.white,
-          child: imageUrl.isNotEmpty
-              ? ClipOval(
-                  child: Image.network(
-                    imageUrl,
-                    fit: BoxFit.cover,
-                    width: 90,
-                    height: 90,
-                    errorBuilder: (context, error, stackTrace) =>
-                        const Icon(Icons.person, size: 50),
-                  ),
-                )
-              : const Icon(Icons.person, size: 50),
-        ),
-      );
+  decoration: BoxDecoration(
+    image: DecorationImage(
+      image: NetworkImage(AppImage.drawer), // Load network image
+      fit: BoxFit.cover, // Ensures the image covers the background properly
+    ),
+  ),
+  accountName: Text(
+    user?.displayName ?? 'Guest User',
+    style: GoogleFonts.lora(fontSize: 18, fontWeight: FontWeight.bold),
+  ),
+  accountEmail: Text(
+    user?.email ?? 'No Email',
+    style: GoogleFonts.lora(fontSize: 14),
+  ),
+  currentAccountPicture: CircleAvatar(
+    backgroundColor: Colors.white,
+    child: imageUrl.isNotEmpty
+        ? ClipOval(
+            child: Image.network(
+              imageUrl,
+              fit: BoxFit.cover,
+              width: 90,
+              height: 90,
+              errorBuilder: (context, error, stackTrace) =>
+                  const Icon(Icons.person, size: 50),
+            ),
+          )
+        : const Icon(Icons.person, size: 50),
+  ),
+);
+
     },
   );
 }
 
   Widget _buildMenuList(BuildContext context) {
-    return ListView(
-      shrinkWrap: true,
+    return Stack(
       children: [
-        _buildMenuItem(
-          context,
-          icon: Icons.password,
-          title: 'Change Password',
-          onTap: () {
-            Navigator.push(
+          Opacity(
+                  opacity: 0.2,
+                  child: Image.network(
+                   AppImage.drawer2,
+                    width: double.infinity,
+                    height: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+        ListView(
+          shrinkWrap: true,
+          children: [
+            _buildMenuItem(
               context,
-              MaterialPageRoute(
-                  builder: (context) => const ChangePasswordScreen()),
-            );
-          },
+              icon: Icons.password,
+              title: 'Change Password',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const ChangePasswordScreen()),
+                );
+              },
+            ),
+          ],
         ),
       ],
     );
@@ -133,6 +151,7 @@ class DrawerItem extends StatelessWidget {
 
   Widget _buildLogoutButton(BuildContext context) {
     return ListTile(
+      tileColor: Colors.transparent,
       leading: const Icon(Icons.exit_to_app, color: Colors.redAccent),
       title: Text(
         'Logout',
