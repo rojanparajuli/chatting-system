@@ -26,6 +26,7 @@ class SendMessage extends ChatEvent {
 }
 
 class CloseChat extends ChatEvent {}
+
 class ChatUpdated extends ChatEvent {
   final List<Map<String, dynamic>> messages;
   ChatUpdated(this.messages);
@@ -33,4 +34,3 @@ class ChatUpdated extends ChatEvent {
   @override
   List<Object?> get props => [messages];
 }
-
