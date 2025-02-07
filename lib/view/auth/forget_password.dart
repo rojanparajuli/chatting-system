@@ -1,7 +1,7 @@
 import 'package:audiocall/auth/bloc/auth_bloc.dart';
 import 'package:audiocall/auth/bloc/auth_event.dart';
 import 'package:audiocall/auth/bloc/auth_state.dart';
-import 'package:audiocall/view/login_view.dart';
+import 'package:audiocall/view/auth/login_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

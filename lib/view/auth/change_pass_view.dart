@@ -1,3 +1,4 @@
+import 'package:audiocall/constant/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:audiocall/auth/bloc/auth_bloc.dart';
@@ -20,7 +21,9 @@ class ChangePasswordScreenState extends State<ChangePasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Change Password")),
+      appBar: AppBar(title: Text("Change Password"),
+      backgroundColor: AppColors.primary,
+      ),
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthSuccess) {
@@ -52,6 +55,7 @@ class ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   obscureText: true,
                   decoration: InputDecoration(labelText: "New Password"),
                   validator: (value) => value!.length < 6 ? "Password too short" : null,
+                  
                 ),
                 SizedBox(height: 10),
                 TextFormField(
