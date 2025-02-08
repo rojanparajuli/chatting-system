@@ -1,7 +1,7 @@
 import 'package:audiocall/bloc/splash/splash_bloc.dart';
 import 'package:audiocall/bloc/splash/splash_event.dart';
 import 'package:audiocall/bloc/splash/splash_state.dart';
-import 'package:audiocall/my_app.dart';
+import 'package:audiocall/main/my_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

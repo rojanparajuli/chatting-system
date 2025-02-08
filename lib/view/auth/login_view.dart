@@ -1,7 +1,7 @@
 import 'package:audiocall/auth/bloc/auth_bloc.dart';
 import 'package:audiocall/auth/bloc/auth_event.dart';
 import 'package:audiocall/auth/bloc/auth_state.dart';
-import 'package:audiocall/my_app.dart';
+import 'package:audiocall/main/my_app.dart';
 import 'package:audiocall/view/auth/forget_password.dart';
 import 'package:audiocall/view/auth/sign_up_view.dart';
 import 'package:flutter/material.dart';
