@@ -1,4 +1,4 @@
-import 'package:audiocall/my_app.dart';
+import 'package:audiocall/main/my_app.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
