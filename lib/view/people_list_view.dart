@@ -71,15 +71,15 @@ class UserListScreen extends StatelessWidget {
           } else if (state is PeopleListUserLoaded) {
             return Stack(
               children: [
-                Opacity(
-                  opacity: 0.8,
-                  child: Image.network(
-                   AppImage.home,
-                    width: double.infinity,
-                    height: double.infinity,
-                    fit: BoxFit.cover,
-                  ),
-                ),
+                // Opacity(
+                //   opacity: 0.8,
+                //   child: Image.network(
+                //    AppImage.home,
+                //     width: double.infinity,
+                //     height: double.infinity,
+                //     fit: BoxFit.cover,
+                //   ),
+                // ),
                 Text('${getGreeting()} ${currentUser?.displayName ?? 'User'}',     style: const TextStyle(
             color: Colors.white,
             fontSize: 15,
