@@ -69,8 +69,8 @@ class DrawerItem extends StatelessWidget {
       return UserAccountsDrawerHeader(
   decoration: BoxDecoration(
     image: DecorationImage(
-      image: NetworkImage(AppImage.drawer), // Load network image
-      fit: BoxFit.cover, // Ensures the image covers the background properly
+      image: NetworkImage(AppImage.drawer), 
+      fit: BoxFit.cover, 
     ),
   ),
   accountName: Text(
